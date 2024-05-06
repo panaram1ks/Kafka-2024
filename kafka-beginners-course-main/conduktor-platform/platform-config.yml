@@ -20,8 +20,8 @@ auth: # Define a local user (optional)
 monitoring: # Monitoring settings (optional)
   cortex-url: http://conduktor-monitoring:9009/
   alert-manager-url: http://conduktor-monitoring:9010/
-  callback-url: http://conduktor-console:8082/monitoring/api/
-  notifications-callback-url: http://localhost:8082
+  callback-url: http://conduktor-console:8080/monitoring/api/
+  notifications-callback-url: http://localhost:8080
 
 clusters: # Cluster and schema registry configuration (optional)
   - id: my-local-kafka-cluster

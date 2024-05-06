@@ -1,4 +1,5 @@
-version: '3.9'
+#version: '3.9'
+version: '3.3'
 
 services:
   zookeeper:
@@ -68,7 +69,7 @@ services:
     depends_on:
       - postgresql
     ports:
-      - "8082:8082"
+      - "8080:8080"
     volumes:
       - type: bind
         source: "./platform-config.yml"
@@ -82,4 +83,4 @@ services:
     container_name: conduktor-monitoring
     image: conduktor/conduktor-console-cortex:1.23.0
     environment:
-      CDK_CONSOLE-URL: "http://conduktor-console:8082"
+      CDK_CONSOLE-URL: "http://conduktor-console:8080"

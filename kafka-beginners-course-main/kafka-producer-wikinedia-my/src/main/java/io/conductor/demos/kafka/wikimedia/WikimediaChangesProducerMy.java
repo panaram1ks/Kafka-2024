@@ -3,6 +3,7 @@ package io.conductor.demos.kafka.wikimedia;
 import com.launchdarkly.eventsource.EventHandler;
 import com.launchdarkly.eventsource.EventSource;
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.net.URI;
@@ -21,6 +22,12 @@ public class WikimediaChangesProducerMy {
         properties.setProperty("bootstrap.servers", "127.0.0.1:9092");
         properties.setProperty("key.serializer", StringSerializer.class.getName());
         properties.setProperty("value.serializer", StringSerializer.class.getName());
+
+        // SET SAFE producer config!!! (Kafka <= 2.8)
+        properties.setProperty(ProducerConfig.ACKS_CONFIG, "all"); // same if set  "-1"
+        properties.setProperty(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+        properties.setProperty(ProducerConfig.RETRIES_CONFIG, Integer.toString(Integer.MAX_VALUE));
+
 
         // create the Producer
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);

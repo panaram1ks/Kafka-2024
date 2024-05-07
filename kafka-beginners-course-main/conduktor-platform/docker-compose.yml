@@ -69,7 +69,7 @@ services:
     depends_on:
       - postgresql
     ports:
-      - "8080:8080"
+      - "8085:8080"
     volumes:
       - type: bind
         source: "./platform-config.yml"
@@ -83,4 +83,4 @@ services:
     container_name: conduktor-monitoring
     image: conduktor/conduktor-console-cortex:1.23.0
     environment:
-      CDK_CONSOLE-URL: "http://conduktor-console:8080"
+      CDK_CONSOLE-URL: "http://conduktor-console:8085"

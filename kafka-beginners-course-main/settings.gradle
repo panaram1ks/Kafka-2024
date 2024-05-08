@@ -4,4 +4,5 @@ include 'kafka-producer-wikimedia'
 include 'kafka-consumer-opensearch'
 include 'kafka-streams-wikimedia'
 include 'kafka-producer-wikinedia-my'
+include 'kafka-consumer-opensearch-my'
 

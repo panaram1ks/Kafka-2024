@@ -75,11 +75,14 @@ public class OpenSearchConsumer {
                                 .source(record.value(), XContentType.JSON)
                                 .id(id);
                         IndexResponse response = openSearchClient.index(indexRequest, RequestOptions.DEFAULT);
-                        log.info(response.getId());
+//                        log.info(response.getId());
                     } catch (Exception e) {
 
                     }
                 }
+                // commit offset after the batch is consumed
+                consumer.commitSync();
+                log.info("Offset have been committed!");
             }
         }
         // main code logic

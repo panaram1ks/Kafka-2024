@@ -1,5 +1,6 @@
 package io.conductor;
 
+import com.google.gson.JsonParser;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -62,9 +63,22 @@ public class OpenSearchConsumer {
 
                 for (ConsumerRecord<String, String> record : records) {
                     // send the record into OpenSearch
-                    IndexRequest indexRequest = new IndexRequest("wikinedia").source(record.value(), XContentType.JSON);
-                    IndexResponse response = openSearchClient.index(indexRequest, RequestOptions.DEFAULT);
-                    log.info(response.getId());
+                    // strategy 1
+                    //define an ID using Kafka Record coordinates
+//                    String id = record.topic() + "_" + record.partition() + "_" + record.offset();
+
+                    try {
+                        // strategy 2
+                        // extract the ID from the JSON value
+                        String id = extractId(record.value());
+                        IndexRequest indexRequest = new IndexRequest("wikinedia")
+                                .source(record.value(), XContentType.JSON)
+                                .id(id);
+                        IndexResponse response = openSearchClient.index(indexRequest, RequestOptions.DEFAULT);
+                        log.info(response.getId());
+                    } catch (Exception e) {
+
+                    }
                 }
             }
         }
@@ -72,6 +86,13 @@ public class OpenSearchConsumer {
 
         // close things
 //        openSearchClient.close();
+    }
+
+    private static String extractId(String json) {
+        // gson library
+        return JsonParser.parseString(json)
+                .getAsJsonObject().get("meta")
+                .getAsJsonObject().get("id").getAsString();
     }
 
     private static KafkaConsumer<String, String> createKafkaConsumer() {
